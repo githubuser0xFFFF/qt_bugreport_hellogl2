@@ -85,6 +85,10 @@ void GLWidget::cleanup()
     m_program = nullptr;
     doneCurrent();
     QObject::disconnect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &GLWidget::cleanup);
+    m_HiddenOnCleanup = isHidden();
+    // Hiding here prevents the base class implementation to recreate
+    // the QOpenGlContext immediatelly allowing us to set the surface format again
+    hide();
 }
 
 static const char *vertexShaderSourceCore =
@@ -254,4 +258,20 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         setZRotation(m_zRot + 8 * dx);
     }
     m_lastPos = event->position().toPoint();
+}
+
+
+bool GLWidget::event(QEvent *event)
+{
+    auto Result = QOpenGLWidget::event(event);
+    if (!context())
+    {
+        qDebug() << "event2: " << event;
+        setFormat(QSurfaceFormat::defaultFormat());
+        if (!m_HiddenOnCleanup)
+        {
+            show();
+        }
+    }
+    return Result;
 }

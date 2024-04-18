@@ -44,6 +44,7 @@ protected:
     void resizeGL(int width, int height) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    virtual bool event(QEvent *event) override;
 
 private:
     void setupVertexAttribs();
@@ -65,6 +66,7 @@ private:
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;
     static bool m_transparent;
+    bool m_HiddenOnCleanup = false;
 };
 
 #endif
