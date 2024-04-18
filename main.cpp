@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
         fmt.setVersion(3, 2);
         fmt.setProfile(QSurfaceFormat::CoreProfile);
     }
+    fmt.setSamples(4); // hardcode multisampling for bug report
     QSurfaceFormat::setDefaultFormat(fmt);
 
     MainWindow mainWindow;
